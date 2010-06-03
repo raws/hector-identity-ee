@@ -11,15 +11,15 @@ module Hector
     end
     
     def authenticate(username, password)
-      
+      identity(username)[:password] == hash(password)
     end
     
     def remember(username, password)
-      
+      true
     end
     
     def forget(username)
-      
+      true
     end
     
     def normalize(username)
@@ -36,6 +36,14 @@ module Hector
         options = config["database"]
         adapter = options.delete("adapter")
         @db = Sequel.send(adapter, options)
+      end
+      
+      def identity(username)
+        user = db[:exp_members].first(:username => username) || {}
+      end
+      
+      def hash(password)
+        Digest::SHA1.hexdigest(password)
       end
       
       def ensure_config_file_exists

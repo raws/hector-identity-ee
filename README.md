@@ -10,13 +10,12 @@ Install hector-auth-ee with RubyGems and navigate to your server:
 
 Create `config/expression_engine.yml`:
 
-    ---
     database:
-        adapter: mysql
-        host: mysql.myserver.com
-        user: hector
-        password: s3cr3t
-        database: expressionengine
+      adapter: mysql
+      host: mysql.myserver.com
+      user: hector
+      password: s3cr3t
+      database: expressionengine
 
 You can connect Hector to hector-identity-ee by modifying `init.rb` in your server's directory:
 
@@ -25,7 +24,7 @@ You can connect Hector to hector-identity-ee by modifying `init.rb` in your serv
 
 ### License <small>(MIT)</small>
 
-<small>Copyright © 2010 Ross Paffett.</small>
+<small>Copyright © 2011 Ross Paffett.</small>
 
 <small>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</small>
 

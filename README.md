@@ -1,4 +1,4 @@
-hector-identity-ee is an [ExpressionEngine](http://expressionengine.com/) 1.7 identity adapter for Hector.
+hector-identity-ee is an [ExpressionEngine](http://expressionengine.com/) 1.7 identity adapter for [Hector](http://github.com/sstephenson/hector).
 
 ### Installation and usage
 

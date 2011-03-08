@@ -1,12 +1,12 @@
 <?php
 class Hector_identity_adapter
 {
-	var $name 				= "Hector Identity Adapter";
-	var $version 			= "1.0.0";
-	var $description 		= "Hector-compatible login credentials";
-	var $docs_url 			= "http://github.com/raws/hector-identity-ee";
-	var $settings_exist 	= "n";
-	var $settings 			= array();
+	var $name = "Hector Identity Adapter";
+	var $version = "1.0.0";
+	var $description = "Hector-compatible login credentials";
+	var $docs_url = "http://github.com/raws/hector-identity-ee";
+	var $settings_exist = "n";
+	var $settings = array();
 	
 	function Hector_identity_adapter($settings="")
 	{
@@ -72,13 +72,13 @@ class Hector_identity_adapter
 		
 		$DB->query($DB->insert_string("exp_extensions", array(
 			"extension_id" => "",
-			"class"			=> "Hector_identity_adapter",
-			"hook"			=> $hook,
-			"method"			=> "on_$hook",
-			"settings"		=> "",
-			"priority"		=> 10,
-			"version"		=> $this->version,
-			"enabled"		=> "y"
+			"class" => "Hector_identity_adapter",
+			"hook" => $hook,
+			"method" => "on_$hook",
+			"settings" => "",
+			"priority" => 10,
+			"version" => $this->version,
+			"enabled" => "y"
 		)));
 	}
 }

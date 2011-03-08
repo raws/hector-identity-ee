@@ -1,54 +1,69 @@
-require "sequel"
+require "digest/sha1"
+require "yaml"
+
+begin
+  require "sequel"
+rescue LoadError => e
+  if require "rubygems"
+    retry
+  else
+    raise e
+  end
+end
+
 
 module Hector
   class ExpressionEngineIdentityAdapter
-    attr_reader :config_filename, :config, :db
+    attr_reader :filename, :config, :db
     
-    def initialize(config_filename = nil)
-      @config_filename ||= Hector.root.join("config/expression_engine.yml")
+    def initialize(filename = nil)
+      @filename ||= Hector.root.join("config/expression_engine.yml")
       load_config
       load_database
     end
     
     def authenticate(username, password)
-      identity(username)[:password] == hash(password)
+      yield identity(normalize(username)) == hash(password)
     end
     
     def remember(username, password)
-      true
+      Hector.logger.warn "Hector cannot manage ExpressionEngine members"
+      false
     end
     
     def forget(username)
-      true
+      Hector.logger.warn "Hector cannot manage ExpressionEngine members"
+      false
     end
     
     def normalize(username)
-      username
+      username.strip.downcase
     end
     
     protected
       def load_config
-        ensure_config_file_exists
-        @config = YAML.load_file(config_filename) || {}
+        @config = YAML.load_file(filename)
+      rescue => e
+        Hector.logger.fatal "Could not load #{filename} (#{e.class.name})"
+        exit 1
       end
       
       def load_database
-        options = config["database"]
-        adapter = options.delete("adapter")
-        @db = Sequel.send(adapter, options)
+        @db = Sequel.mysql2(config["database"])
+      rescue => e
+        Hector.logger.fatal "Can't connect to ExpressionEngine database: #{e.message} (#{e.class.name})"
+        exit 1
       end
       
       def identity(username)
-        user = db[:exp_members].first(:username => username) || {}
+        Hector.logger.debug "Authenticating #{username.inspect}..."
+        query = { :hector_username => username }
+        query[:group_id] = config["groups"] if config["groups"]
+        (db[:exp_members].select(:password).first(query) || {})[:password]
       end
       
       def hash(password)
         Digest::SHA1.hexdigest(password)
-      end
-      
-      def ensure_config_file_exists
-        FileUtils.mkdir_p(File.dirname(config_filename))
-        FileUtils.touch(config_filename)
       end
   end
 end

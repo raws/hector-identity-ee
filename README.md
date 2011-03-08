@@ -2,20 +2,27 @@ hector-identity-ee is an [ExpressionEngine](http://expressionengine.com/) 1.7 id
 
 ### Installation and usage
 
+Copy `lib/expression_engine/ext.hector_identity_adapter.php` to your ExpressionEngine installation's `system/extensions` directory, then enable it by navigating to Admin > Utilities > Extensions Manager. Upon activation, the extension will generate safe usernames in the `exp_members.hector_username` column for all existing and future members. A user should log in to Hector using his or her `hector_username`.
+
 Install hector-auth-ee with RubyGems and navigate to your server:
 
-    $ gem install -r hector-identity-ee
+    $ gem install hector-identity-ee
     ...
     $ cd myserver.hect
 
 Create `config/expression_engine.yml`:
 
     database:
-      adapter: mysql
       host: mysql.myserver.com
       user: hector
       password: s3cr3t
-      database: expressionengine
+      database: expression_engine
+
+Optionally limit logins to members of specific groups by adding a `groups` key:
+
+    groups:
+      - 1 # Admins
+      - 6 # Moderators
 
 You can connect Hector to hector-identity-ee by modifying `init.rb` in your server's directory:
 

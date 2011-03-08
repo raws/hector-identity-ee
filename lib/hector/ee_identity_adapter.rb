@@ -51,12 +51,11 @@ module Hector
       def load_database
         @db = Sequel.mysql2(config["database"])
       rescue => e
-        Hector.logger.fatal "Can't connect to ExpressionEngine database: #{e.message} (#{e.class.name})"
+        Hector.logger.fatal "Could not connect to ExpressionEngine database: #{e.message} (#{e.class.name})"
         exit 1
       end
       
       def identity(username)
-        Hector.logger.debug "Authenticating #{username.inspect}..."
         query = { :hector_username => username }
         query[:group_id] = config["groups"] if config["groups"]
         (db[:exp_members].select(:password).first(query) || {})[:password]

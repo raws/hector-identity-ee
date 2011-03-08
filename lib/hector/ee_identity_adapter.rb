@@ -17,7 +17,7 @@ module Hector
     attr_reader :filename, :config, :db
     
     def initialize(filename = nil)
-      @filename ||= Hector.root.join("config/expression_engine.yml")
+      @filename = filename || Hector.root.join("config/expression_engine.yml")
       load_config
       load_database
     end

@@ -27,7 +27,7 @@ Optionally limit logins to members of specific groups by adding a `groups` key:
 You can connect Hector to hector-identity-ee by modifying `init.rb` in your server's directory:
 
     require "hector/ee_identity_adapter"
-    Hector::Identity.adapter = ExpressionEngineIdentityAdapter.new
+    Hector::Identity.adapter = Hector::ExpressionEngineIdentityAdapter.new
 
 ### License <small>(MIT)</small>
 

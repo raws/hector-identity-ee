@@ -2,7 +2,7 @@ hector-identity-ee is an [ExpressionEngine](http://expressionengine.com/) 2.x id
 
 ### Installation and usage
 
-Copy `lib/expression_engine/hector_identity/` to your ExpressionEngine installation's `system/expressionengine/third_party/` directory, then enable it by navigating to Add-Ons > Extensions. Upon activation, the extension will generate safe usernames in the `exp_members.hector_username` column for all existing and future members. A user should log in to Hector using his or her `hector_username`.
+Copy `lib/expression_engine/hector_identity/` to your ExpressionEngine installation's `system/expressionengine/third_party/` directory, then enable it by navigating to Add-Ons > Extensions. Upon activation, the extension will generate safe usernames in the `exp_members.hector_username` column for all existing and future members. A user should log in to Hector using his or her `hector_username`. You can display a logged in user's Hector username in a template using `{exp:hector:username}`.
 
 Install hector-auth-ee with RubyGems and navigate to your server:
 

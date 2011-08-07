@@ -1,7 +1,7 @@
 <?php
-class Hector_identity_ext
+class Hector_ext
 {
-	var $name = "Hector Identity";
+	var $name = "Hector";
 	var $version = "2.0.0";
 	var $description = "Hector-compatible login credentials";
 	var $docs_url = "http://github.com/raws/hector-identity-ee";

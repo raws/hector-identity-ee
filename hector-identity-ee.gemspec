@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = "hector-identity-ee"
-  s.version = "1.0.0"
+  s.version = "2.0.0"
   s.platform = Gem::Platform::RUBY
   s.authors = ["Ross Paffett"]
   s.email = ["ross@rosspaffett.com"]
@@ -10,6 +10,6 @@ spec = Gem::Specification.new do |s|
   s.files = Dir["lib/hector/*.rb"]
   s.require_path = "lib"
   
-  s.add_dependency "sequel", ">=3.21.0"
-  s.add_dependency "mysql2", ">=0.2.6"
+  s.add_dependency "sequel", ">=3.26.0"
+  s.add_dependency "mysql2", ">=0.3.6"
 end

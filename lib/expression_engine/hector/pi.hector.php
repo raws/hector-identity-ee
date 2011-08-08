@@ -18,7 +18,21 @@ class Hector
 	
 	public function username()
 	{
-		return $this->EE->session->userdata["hector_username"];
+		if ($member_id = $this->EE->TMPL->fetch_param("member_id"))
+		{
+			$this->EE->db->select("hector_username");
+			$query = $this->EE->db->get_where("members", array("member_id" => $member_id), 1);
+			if ($query->num_rows() > 0)
+			{
+				return $query->row("hector_username");
+			}
+		}
+		else
+		{
+			return $this->EE->session->userdata["hector_username"];
+		}
+		
+		return FALSE;
 	}
 }
 ?>

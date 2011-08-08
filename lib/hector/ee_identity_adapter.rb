@@ -58,7 +58,11 @@ module Hector
       def identity(username)
         query = { :hector_username => username }
         query[:group_id] = config["groups"] if config["groups"]
-        (db[:exp_members].select(:password).first(query) || {})[:password]
+        (table(:members).select(:password).first(query) || {})[:password]
+      end
+      
+      def table(name)
+        db["#{(config["prefix"] || "exp")}_#{name}"]
       end
       
       def hash(password)

@@ -19,6 +19,7 @@ Create `config/expression_engine.yml`:
       user: hector
       password: s3cr3t
       database: expression_engine
+      prefix: exp # optional, defaults to "exp"
 
 Optionally limit logins to members of specific groups by adding a `groups` key:
 

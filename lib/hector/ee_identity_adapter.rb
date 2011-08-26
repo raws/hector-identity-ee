@@ -1,8 +1,7 @@
-require "digest/sha1"
 require "yaml"
 
 begin
-  require "sequel"
+  require "mysql2"
 rescue LoadError => e
   if require "rubygems"
     retry
@@ -11,19 +10,17 @@ rescue LoadError => e
   end
 end
 
-
 module Hector
   class ExpressionEngineIdentityAdapter
-    attr_reader :filename, :config, :db
+    attr_reader :config, :database
     
     def initialize(filename = nil)
-      @filename = filename || Hector.root.join("config/expression_engine.yml")
-      load_config
+      load_config(filename || Hector.root.join("config/expression_engine.yml"))
       load_database
     end
     
     def authenticate(username, password)
-      yield identity(normalize(username)) == hash(password)
+      yield normalize(identity(normalize(username))) == normalize(password)
     end
     
     def remember(username, password)
@@ -36,37 +33,48 @@ module Hector
       false
     end
     
-    def normalize(username)
-      username.strip.downcase
-    end
-    
     protected
-      def load_config
+      def load_config(filename)
         @config = YAML.load_file(filename)
       rescue => e
-        Hector.logger.fatal "Could not load #{filename} (#{e.class.name})"
+        Hector.logger.fatal "#{e.class.name} while loading #{filename}: #{e.message}"
         exit 1
       end
       
       def load_database
-        @db = Sequel.mysql2(config["database"])
+        @database = Mysql2::Client.new(connection_params)
       rescue => e
-        Hector.logger.fatal "Could not connect to ExpressionEngine database: #{e.message} (#{e.class.name})"
+        Hector.logger.fatal "#{e.class.name} while connecting to ExpressionEngine database: #{e.message}"
         exit 1
       end
       
+      def connection_params
+        config["database"].inject({}) do |hash, (key, value)|
+          hash[key.to_sym] = value; hash
+        end
+      end
+      
       def identity(username)
-        query = { :hector_username => username }
-        query[:group_id] = config["groups"] if config["groups"]
-        (table(:members).select(:password).first(query) || {})[:password]
+        sql = "SELECT hector_password FROM #{table(:members)} WHERE hector_username = '#{escape(username)}'"
+        sql << " AND group_id IN (#{config["groups"].join(",")})" if config["groups"]
+        (query(sql).first || {})["hector_password"]
       end
       
       def table(name)
-        db["#{(config["prefix"] || "exp")}_#{name}"]
+        "#{config["prefix"] || "exp"}_#{name}"
       end
       
-      def hash(password)
-        Digest::SHA1.hexdigest(password)
+      def escape(input)
+        database.escape(input)
+      end
+      
+      def query(sql)
+        Hector.logger.debug(sql.inspect)
+        database.query(sql)
+      end
+      
+      def normalize(input)
+        input.strip.downcase
       end
   end
 end

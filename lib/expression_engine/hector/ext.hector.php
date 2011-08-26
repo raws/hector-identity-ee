@@ -2,7 +2,7 @@
 class Hector_ext
 {
 	var $name = "Hector";
-	var $version = "2.0.0";
+	var $version = "2.1.0";
 	var $description = "Hector-compatible login credentials";
 	var $docs_url = "http://github.com/raws/hector-identity-ee";
 	var $settings_exist = "n";
@@ -28,23 +28,25 @@ class Hector_ext
 		
 		$this->EE->load->dbforge();
 		$this->EE->dbforge->drop_column("members", "hector_username");
+		$this->EE->dbforge->drop_column("members", "hector_password");
 	}
 	
 	function on_member_member_register($member, $member_id)
 	{
-		$this->set_hector_username_for_member($member_id, $member["username"]);
+		$this->set_hector_credentials_for_member($member_id, $member["username"]);
 	}
 	
 	function on_cp_members_member_create($member_id, $member)
 	{
-		$this->set_hector_username_for_member($member_id, $member["username"]);
+		$this->set_hector_credentials_for_member($member_id, $member["username"]);
 	}
 	
-	private function set_hector_username_for_member($member_id, $username)
+	private function set_hector_credentials_for_member($member_id, $username)
 	{
 		$this->EE->db->where("member_id", $member_id);
 		$this->EE->db->update("members", array(
-			"hector_username" => $this->hector_username($username)
+			"hector_username" => $this->hector_username($username),
+			"hector_password" => $this->hector_password()
 		));
 	}
 	
@@ -53,11 +55,17 @@ class Hector_ext
 		return substr(preg_replace('/\W/', "", preg_replace('/\s/', "_", strtolower($username))), 0, 16);
 	}
 	
+	private function hector_password()
+	{
+		return substr(str_shuffle(str_repeat("AaBbCcDdEeFfGgHhJjKkLMmNnoPpQqRrSsTtUuVvWwXxYyZz23456789", 3)), 0, mt_rand(8, 16));
+	}
+	
 	private function activate_database()
 	{
 		$this->EE->load->dbforge();
 		$this->EE->dbforge->add_column("members", array(
-			"hector_username" => array("type" => "VARCHAR", "constraint" => "16")
+			"hector_username" => array("type" => "VARCHAR", "constraint" => "16"),
+			"hector_password" => array("type" => "VARCHAR", "constraint" => "16")
 		));
 		
 		$this->EE->db->select("member_id, username");
@@ -68,7 +76,8 @@ class Hector_ext
 			{
 				$this->EE->db->where("member_id", $member->member_id);
 				$this->EE->db->update("members", array(
-					"hector_username" => $this->hector_username($member->username)
+					"hector_username" => $this->hector_username($member->username),
+					"hector_password" => $this->hector_password()
 				));
 			}
 		}

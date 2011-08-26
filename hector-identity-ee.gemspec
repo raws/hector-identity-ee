@@ -10,6 +10,5 @@ spec = Gem::Specification.new do |s|
   s.files = Dir["lib/hector/*.rb"]
   s.require_path = "lib"
   
-  s.add_dependency "sequel", ">=3.26.0"
-  s.add_dependency "mysql2", ">=0.3.6"
+  s.add_dependency "mysql2", ">=0.3.7"
 end

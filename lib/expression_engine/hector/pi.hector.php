@@ -2,7 +2,7 @@
 
 $plugin_info = array(
 	"pi_name" => "Hector",
-	"pi_version" => "2.0.0",
+	"pi_version" => "2.1.1",
 	"pi_author" => "Ross Paffett",
 	"pi_author_url" => "http://github.com/raws/hector-identity-ee",
 	"pi_description" => "Hector-compatible login credentials",

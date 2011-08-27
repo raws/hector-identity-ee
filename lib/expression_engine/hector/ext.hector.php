@@ -2,7 +2,7 @@
 class Hector_ext
 {
 	var $name = "Hector";
-	var $version = "2.1.0";
+	var $version = "2.1.1";
 	var $description = "Hector-compatible login credentials";
 	var $docs_url = "http://github.com/raws/hector-identity-ee";
 	var $settings_exist = "n";

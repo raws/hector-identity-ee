@@ -12,14 +12,16 @@ end
 
 module Hector
   class ExpressionEngineIdentityAdapter
-    attr_reader :config, :database
+    attr_reader :config, :database, :filename
     
     def initialize(filename = nil)
-      load_config(filename || Hector.root.join("config/expression_engine.yml"))
+      @filename = filename || Hector.root.join("config/expression_engine.yml")
+      load_config
       load_database
     end
     
     def authenticate(username, password)
+      load_config
       yield normalize(identity(normalize(username))) == normalize(password)
     end
     
@@ -34,7 +36,7 @@ module Hector
     end
     
     protected
-      def load_config(filename)
+      def load_config
         @config = YAML.load_file(filename)
       rescue => e
         Hector.logger.fatal "#{e.class.name} while loading #{filename}: #{e.message}"
@@ -74,7 +76,7 @@ module Hector
       end
       
       def normalize(input)
-        input.strip.downcase
+        input.to_s.strip.downcase if input
       end
   end
 end

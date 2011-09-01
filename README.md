@@ -24,7 +24,7 @@ Create `config/expression_engine.yml`:
 
     database:
       host: mysql.myserver.com
-      user: hector
+      username: hector
       password: s3cr3t
       database: expression_engine
       prefix: exp # optional, defaults to "exp"

@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = "hector-identity-ee"
-  s.version = "2.1.1"
+  s.version = "2.1.2"
   s.platform = Gem::Platform::RUBY
   s.authors = ["Ross Paffett"]
   s.email = ["ross@rosspaffett.com"]

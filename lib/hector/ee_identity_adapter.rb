@@ -51,9 +51,13 @@ module Hector
       end
       
       def connection_params
-        config["database"].inject({}) do |hash, (key, value)|
+        config["database"].inject(default_connection_params) do |hash, (key, value)|
           hash[key.to_sym] = value; hash
         end
+      end
+      
+      def default_connection_params
+        { :reconnect => true }
       end
       
       def identity(username)
